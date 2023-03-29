@@ -113,7 +113,7 @@ export const ArticleHeader = ({
   const titleContent = seoTitle
     ? `${seoTitle} ${separator} ${siteName}`
     : siteName;
-    
+
   const pwaIconSizes = ['192', '512'];
 
   return (
@@ -154,7 +154,7 @@ export const ArticleHeader = ({
         <meta property="og:type" content="article" />
         <meta property="og:title" content={titleContent} />
         <meta property="og:description" content={seoDescription || fallbackDescription} />
-        <meta property="og:image" content={coverImg || defaultImgUrl} />
+        <meta property="og:image" content={coverImg} />
       </Helmet>
       <Wrapper>
         <BackToBlog />
