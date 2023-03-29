@@ -21,6 +21,7 @@ module.exports = {
       },
       __key: 'pages',
     },
+    'gatsby-plugin-netlify',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-gatsby-cloud',
     'gatsby-plugin-image',
