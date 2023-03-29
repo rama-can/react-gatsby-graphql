@@ -2,7 +2,7 @@
 import { useLocation } from '@reach/router';
 import { graphql, useStaticQuery } from 'gatsby';
 import { Helmet } from 'react-helmet';
-import { useLocales } from '../../../../hooks/useLocales';
+
 import {
   ArticleTitle,
   ArticleSubtitle,
@@ -15,6 +15,7 @@ import {
 import { formatDateTime } from '../../../../functions/formatDateTime';
 import { useTextDirection } from '../../../../hooks/useTextDirection';
 import { usePageLocale } from '../../../../hooks/usePageLocale';
+import { useLocales } from '../../../../hooks/useLocales';
 import { Navigator } from '../../../Navigator';
 import { BackToBlog } from '../BackToBlog';
 
@@ -51,8 +52,12 @@ export const ArticleHeader = ({
   lastModifiedText,
   firstPublish,
   category,
-
 }) => {
+  const { href } = useLocation();
+  const { pageLocale } = usePageLocale();
+  const { defaultLocale } = useLocales();
+  const { isRtl } = useTextDirection();
+
   const SocialIcons = [
     {
       svgIcon: <FacebookIcon />,
@@ -71,33 +76,27 @@ export const ArticleHeader = ({
   const { formattedDate } = useFormattedDate(firstPublish);
 
   const data = useStaticQuery(graphql`
-  query {
-    allDatoCmsSeoAndPwa {
-      seoAndPwaNodes: nodes {
-        locale
-        siteName
-        separator
-        fallbackDescription
-        defaultOgImage {
-          url
-        }
-        pwaThemeColor {
-          themeHexColor: hex
+    query {
+      allDatoCmsSeoAndPwa {
+        seoAndPwaNodes: nodes {
+          locale
+          siteName
+          separator
+          fallbackDescription
+          defaultOgImage {
+            url
+          }
+          pwaThemeColor {
+            themeHexColor: hex
+          }
         }
       }
     }
-  }
-`);
+  `);
 
   const {
     allDatoCmsSeoAndPwa: { seoAndPwaNodes },
   } = data;
-
-  const { href } = useLocation();
-  const { pageLocale } = usePageLocale();
-  const { defaultLocale } = useLocales();
-
-  const { isRtl } = useTextDirection();
 
   const seoAndPwaNodesMatch = seoAndPwaNodes.find(
     ({ locale }) => locale === pageLocale
@@ -168,15 +167,12 @@ export const ArticleHeader = ({
           name="description"
           content={seoDescription || fallbackDescription}
         />
-        <meta property="og:type" content="article" />
+        <meta property="og:type" content="website" />
         {openGraphTags.map(({ properties, content }) =>
           properties.map((property) => (
             <meta key={property} property={property} content={content} />
           ))
         )}
-        <meta name="author" content={siteName} />
-        <meta name="robots" content="index, follow" />
-        <meta name="googlebot" content="index, follow" />
       </Helmet>
       <Wrapper>
         <BackToBlog />
