@@ -9,6 +9,7 @@ export const NotFoundPageHead = ({ locale, title }) => {
     <Helmet>
       <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} />
       <link rel="icon" href="/favicon-32.png" type="image/png" />
+      <meta name="robots" content="noindex, nofollow" />
       <title>{title}</title>
     </Helmet>
   );

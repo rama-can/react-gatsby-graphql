@@ -2,7 +2,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   siteMetadata: {
-    siteUrl: 'https://ramacan.dev',
+    siteUrl: 'http://localhost:8000',
   },
   plugins: [
     {
@@ -21,34 +21,7 @@ module.exports = {
       },
       __key: 'pages',
     },
-    {
-      resolve: 'gatsby-plugin-sitemap',
-      options: {
-        exclude: ['/dev-404-page/', '/404/', '/404.html'],
-        query: `{
-          allSitePage {
-            nodes {
-              path
-            }
-          }
-        }`,
-        resolveSiteUrl: () => siteUrl,
-        resolvePages: ({
-          allSitePage: { nodes: allPages },
-        }) => {
-
-          return allPages.map(page => {
-            return { ...page }
-          })
-        },
-        serialize: ({ path, modifiedGmt }) => {
-          return {
-            url: path,
-            lastmod: modifiedGmt,
-          }
-        },
-      },
-    },
+    'gatsby-plugin-sitemap',
     'gatsby-plugin-gatsby-cloud',
     'gatsby-plugin-image',
     'gatsby-plugin-react-helmet',
