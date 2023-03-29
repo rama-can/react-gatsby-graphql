@@ -5,7 +5,7 @@
   "description": "Headless Multilingual Starter for Gatsby",
   "author": "Rama Can",
   "scripts": {
-    "build": "gatsby build",
+    "build": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",
     "clean": "gatsby clean",
     "clean-dev": "gatsby clean && gatsby develop",
     "dev": "gatsby develop",
@@ -33,7 +33,8 @@
     "react-helmet": "^6.1.0",
     "react-is": "^18.2.0",
     "react-syntax-highlighter": "^15.5.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "gatsby-plugin-netlify": "^5.1.0"
   },
   "devDependencies": {
     "babel-jest": "^28.1.3",
@@ -43,7 +44,6 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",
-    "gatsby-plugin-netlify": "^5.1.0",
     "jest": "^28.1.3"
   }
 }
