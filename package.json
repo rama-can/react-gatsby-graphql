@@ -8,7 +8,7 @@
     "build": "gatsby build",
     "clean": "gatsby clean",
     "clean-dev": "gatsby clean && gatsby develop",
-    "develop": "gatsby develop",
+    "dev": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "serve": "gatsby serve",
     "start": "gatsby develop",
