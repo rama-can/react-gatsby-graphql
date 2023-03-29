@@ -51,26 +51,43 @@ export const ArticleHeader = ({
   lastModifiedText,
   firstPublish,
   category,
-  
+
 }) => {
+  const SocialIcons = [
+    {
+      svgIcon: <FacebookIcon />,
+      href: `https://www.facebook.com/sharer/sharer.php?u=${href}`,
+    },
+    {
+      svgIcon: <TwitterIcon />,
+      href: `https://twitter.com/share?url=${href}`,
+    },
+    {
+      svgIcon: <LinkedinIcon />,
+      href: `https://www.linkedin.com/shareArticle?mini=true&url=${href}`,
+    },
+  ];
+
+  const { formattedDate } = useFormattedDate(firstPublish);
+
   const data = useStaticQuery(graphql`
-    query {
-      allDatoCmsSeoAndPwa {
-        seoAndPwaNodes: nodes {
-          locale
-          siteName
-          separator
-          fallbackDescription
-          defaultOgImage {
-            url
-          }
-          pwaThemeColor {
-            themeHexColor: hex
-          }
+  query {
+    allDatoCmsSeoAndPwa {
+      seoAndPwaNodes: nodes {
+        locale
+        siteName
+        separator
+        fallbackDescription
+        defaultOgImage {
+          url
+        }
+        pwaThemeColor {
+          themeHexColor: hex
         }
       }
     }
-  `);
+  }
+`);
 
   const {
     allDatoCmsSeoAndPwa: { seoAndPwaNodes },
@@ -93,25 +110,10 @@ export const ArticleHeader = ({
     defaultOgImage: { url: defaultImgUrl },
     pwaThemeColor: { themeHexColor },
   } = seoAndPwaNodesMatch;
-  
+
   const titleContent = seoTitle
     ? `${seoTitle} ${separator} ${siteName}`
     : siteName;
-
-  const SocialIcons = [
-    {
-      svgIcon: <FacebookIcon />,
-      href: `https://www.facebook.com/sharer/sharer.php?u=${href}`,
-    },
-    {
-      svgIcon: <TwitterIcon />,
-      href: `https://twitter.com/share?url=${href}`,
-    },
-    {
-      svgIcon: <LinkedinIcon />,
-      href: `https://www.linkedin.com/shareArticle?mini=true&url=${href}`,
-    },
-  ];
 
   const openGraphTags = [
     {
@@ -131,53 +133,51 @@ export const ArticleHeader = ({
 
   const pwaIconSizes = ['192', '512'];
 
-  const { formattedDate } = useFormattedDate(firstPublish);
-
   return (
     <>
-    <Helmet>
-      {/* HTML lang and dir attrs */}
+      <Helmet>
+        {/* HTML lang and dir attrs */}
 
-      <html lang={pageLocale} dir={isRtl ? 'rtl' : 'ltr'} />
+        <html lang={pageLocale} dir={isRtl ? 'rtl' : 'ltr'} />
 
-      {/* PWA */}
+        {/* PWA */}
 
-      <meta name="theme-color" content={themeHexColor} />
-      <link
-        rel="manifest"
-        href={(() => {
-          if (pageLocale === defaultLocale) return '/manifest.webmanifest';
-          return `/manifest_${pageLocale}.webmanifest`;
-        })()}
-        crossOrigin="anonymous"
-      />
-      <link rel="icon" href="/favicon-32.png" type="image/png" />
-      {pwaIconSizes.map((size) => (
+        <meta name="theme-color" content={themeHexColor} />
         <link
-          key={`icon-${size}`}
-          rel="apple-touch-icon"
-          sizes={`${size}x${size}`}
-          href={`/images/icon-${size}.png`}
+          rel="manifest"
+          href={(() => {
+            if (pageLocale === defaultLocale) return '/manifest.webmanifest';
+            return `/manifest_${pageLocale}.webmanifest`;
+          })()}
+          crossOrigin="anonymous"
         />
-      ))}
+        <link rel="icon" href="/favicon-32.png" type="image/png" />
+        {pwaIconSizes.map((size) => (
+          <link
+            key={`icon-${size}`}
+            rel="apple-touch-icon"
+            sizes={`${size}x${size}`}
+            href={`/images/icon-${size}.png`}
+          />
+        ))}
 
-      {/* SEO meta tags */}
-      
-      <title>{titleContent}</title>
-      <meta
-        name="description"
-        content={seoDescription || fallbackDescription}
-      />
-      <meta property="og:type" content="article" />
-      {openGraphTags.map(({ properties, content }) =>
-        properties.map((property) => (
-          <meta key={property} property={property} content={content} />
-        ))
-      )}
-      <meta name="author" content={siteName}/>
-      <meta name="robots" content="index, follow" />
-      <meta name="googlebot" content="index, follow" />
-    </Helmet>
+        {/* SEO meta tags */}
+
+        <title>{titleContent}</title>
+        <meta
+          name="description"
+          content={seoDescription || fallbackDescription}
+        />
+        <meta property="og:type" content="article" />
+        {openGraphTags.map(({ properties, content }) =>
+          properties.map((property) => (
+            <meta key={property} property={property} content={content} />
+          ))
+        )}
+        <meta name="author" content={siteName} />
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+      </Helmet>
       <Wrapper>
         <BackToBlog />
         {category && (
