@@ -113,23 +113,7 @@ export const ArticleHeader = ({
   const titleContent = seoTitle
     ? `${seoTitle} ${separator} ${siteName}`
     : siteName;
-
-  const openGraphTags = [
-    {
-      properties: ['og:title', 'twitter:title'],
-      content: titleContent,
-    },
-    {
-      properties: ['og:description', 'twitter:description'],
-      content: seoDescription || fallbackDescription,
-    },
-    {
-      properties: ['og:image', 'twitter:image'],
-      content: coverImg || defaultImgUrl,
-    },
-    { properties: ['og:url', 'twitter:url'], content: href },
-  ];
-
+    
   const pwaIconSizes = ['192', '512'];
 
   return (
@@ -167,12 +151,10 @@ export const ArticleHeader = ({
           name="description"
           content={seoDescription || fallbackDescription}
         />
-        <meta property="og:type" content="website" />
-        {openGraphTags.map(({ properties, content }) =>
-          properties.map((property) => (
-            <meta key={property} property={property} content={content} />
-          ))
-        )}
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={titleContent} />
+        <meta property="og:description" content={seoDescription || fallbackDescription} />
+        <meta property="og:image" content={coverImg || defaultImgUrl} />
       </Helmet>
       <Wrapper>
         <BackToBlog />
