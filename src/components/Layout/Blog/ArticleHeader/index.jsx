@@ -1,7 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
 import { useLocation } from '@reach/router';
-import { graphql, useStaticQuery } from 'gatsby';
-import { Helmet } from 'react-helmet';
 
 import {
   ArticleTitle,
@@ -15,7 +13,6 @@ import {
 import { formatDateTime } from '../../../../functions/formatDateTime';
 import { useTextDirection } from '../../../../hooks/useTextDirection';
 import { usePageLocale } from '../../../../hooks/usePageLocale';
-import { useLocales } from '../../../../hooks/useLocales';
 import { Navigator } from '../../../Navigator';
 import { BackToBlog } from '../BackToBlog';
 
@@ -42,8 +39,6 @@ const commonExtLinkProps = {
 
 export const ArticleHeader = ({
   authorName,
-  seoTitle,
-  seoDescription,
   title,
   subtitle,
   authorImg,
@@ -55,7 +50,6 @@ export const ArticleHeader = ({
 }) => {
   const { href } = useLocation();
   const { pageLocale } = usePageLocale();
-  const { defaultLocale } = useLocales();
   const { isRtl } = useTextDirection();
 
   const SocialIcons = [
@@ -75,87 +69,8 @@ export const ArticleHeader = ({
 
   const { formattedDate } = useFormattedDate(firstPublish);
 
-  const data = useStaticQuery(graphql`
-    query {
-      allDatoCmsSeoAndPwa {
-        seoAndPwaNodes: nodes {
-          locale
-          siteName
-          separator
-          fallbackDescription
-          defaultOgImage {
-            url
-          }
-          pwaThemeColor {
-            themeHexColor: hex
-          }
-        }
-      }
-    }
-  `);
-
-  const {
-    allDatoCmsSeoAndPwa: { seoAndPwaNodes },
-  } = data;
-
-  const seoAndPwaNodesMatch = seoAndPwaNodes.find(
-    ({ locale }) => locale === pageLocale
-  );
-
-  const {
-    siteName,
-    separator,
-    fallbackDescription,
-    defaultOgImage: { url: defaultImgUrl },
-    pwaThemeColor: { themeHexColor },
-  } = seoAndPwaNodesMatch;
-
-  const titleContent = seoTitle
-    ? `${seoTitle} ${separator} ${siteName}`
-    : siteName;
-
-  const pwaIconSizes = ['192', '512'];
-
   return (
     <>
-      <Helmet>
-        {/* HTML lang and dir attrs */}
-
-        <html lang={pageLocale} dir={isRtl ? 'rtl' : 'ltr'} />
-
-        {/* PWA */}
-
-        <meta name="theme-color" content={themeHexColor} />
-        <link
-          rel="manifest"
-          href={(() => {
-            if (pageLocale === defaultLocale) return '/manifest.webmanifest';
-            return `/manifest_${pageLocale}.webmanifest`;
-          })()}
-          crossOrigin="anonymous"
-        />
-        <link rel="icon" href="/favicon-32.png" type="image/png" />
-        {pwaIconSizes.map((size) => (
-          <link
-            key={`icon-${size}`}
-            rel="apple-touch-icon"
-            sizes={`${size}x${size}`}
-            href={`/images/icon-${size}.png`}
-          />
-        ))}
-
-        {/* SEO meta tags */}
-
-        <title>{titleContent}</title>
-        <meta
-          name="description"
-          content={seoDescription || fallbackDescription}
-        />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={titleContent} />
-        <meta property="og:description" content={seoDescription || fallbackDescription} />
-        <meta property="og:image" content={coverImg} />
-      </Helmet>
       <Wrapper>
         <BackToBlog />
         {category && (

@@ -27,6 +27,7 @@ const ArticleTemplate = ({
       author,
       seo,
       coverImage: { coverImageData },
+      coverImage: {imgUrl},
       meta: { updatedAt, firstPublishedAt },
       categoryLink,
       relatedPosts,
@@ -39,12 +40,10 @@ const ArticleTemplate = ({
     pageData={pageContext}
     seoTitle={seo?.seoTitle}
     seoDescription={seo?.seoDescription}
-    seoImage={seo?.image?.seoImageUrl}
+    seoImage={imgUrl}
   >
     <Section as="article">
       <ArticleHeader
-        seoTitle={seo?.seoTitle}
-        seoDescription={seo?.seoDescription}
         title={title}
         subtitle={subtitle}
         authorName={author?.authorName}
@@ -177,6 +176,9 @@ export const query = graphql`
       subtitle
       coverImage {
         coverImageData: gatsbyImageData
+      }
+      coverImage {
+        imgUrl: url
       }
       meta {
         updatedAt
